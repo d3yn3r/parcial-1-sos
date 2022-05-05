@@ -54,7 +54,7 @@ int main(int argc, char* argv[]){
 
         //Calculamos el tiempo total de ejecucion
         double total = total_final - total_inicial;
-        printf("El tiempo de ejecucion es : %0.8f\n",total);
+        printf("El tiempo de ejecucion es : %0.8f segundos\n",total);
     }
     //Cerramos la tuberia
     close(fildes[0]);
