@@ -11,14 +11,10 @@
 #include <math.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#include <time.h>
+
 
 int main() { 
-    struct datos {
-        int control; int desplazamiento; int pagina;
-    };
-    struct datos * grupo;
-    grupo = (struct datos *) malloc(3* sizeof(struct datos));
+    
     while (1){
         int numero; 
         int binario[32];
@@ -33,7 +29,6 @@ int main() {
         double total_inicial = t_inicial.tv_sec + t_inicial.tv_usec*1e-6;
         
         if(control == 's'){
-            printf("Good bye!");
             break;
         }
         
@@ -61,26 +56,7 @@ int main() {
                 pagina = pagina + potencia;
             }
         }
-
-        int direccion; 
-        direccion = atoi(&control);
-        char tlb;
-        //int r = rand() % 20;
-        for (int i = 0; i <3; i++){
-            if (grupo[i].control == direccion){
-               &tlb = "Hit" ;
-               break ;
-            }
-
-            if (grupo[i].control == NULL){
-                grupo[i] -> control = direccion ;
-                grupo[i] -> desplazamiento = desplazamiento;
-                grupo[i] -> pagina = pagina;
-
-                &tlb = "Misses";
-                break;
-            }
-        }
+        
         
         //tiempo final
         struct timeval t_final;
@@ -97,9 +73,6 @@ int main() {
         printf("\n");
         printf("Tiempo de traducción: ");
         printf("%0.8f",total);
-        printf("\n");
-        printf("TLB: ");
-        printf("%s",tlb);
         printf("\n");
     }       
 }
