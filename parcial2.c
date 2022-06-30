@@ -15,23 +15,30 @@
 
 int main() { 
     struct datos {
-        int control; int desplazamiento; int pagina;
+        int direc; int desp; int pag;
     };
     struct datos * grupo;
     grupo = (struct datos *) malloc(3* sizeof(struct datos));
+
+    int contador_memoria = 0; 
     while (1){
         int numero; 
         int binario[32];
         char control;
         int z,x,d,q,potencia=0,desplazamiento=0,pagina = 0,cont;
+        int hit = 0;
         printf("Ingrese dirección virtual: ");
         scanf("%s",&control);
         
+
+
         //tiempo inicial
         struct timeval t_inicial;
         gettimeofday(&t_inicial,NULL);
         double total_inicial = t_inicial.tv_sec + t_inicial.tv_usec*1e-6;
         
+
+
         if(control == 's'){
             printf("Good bye!");
             break;
@@ -44,6 +51,25 @@ int main() {
                 numero = numero/2;
             }
         }
+        int direccion; 
+        direccion = atoi(&control);
+        int pertenecer = -1;
+        for (int j = 0; j< 3;j++){
+            printf("%d\n",grupo[j].direc);
+            printf("%d\n",direccion);
+            if (grupo[j].direc == direccion){
+                pertenecer = j;
+            }
+        }
+        printf("Pertenecer : %d\n",pertenecer);
+        if (pertenecer != -1){
+            printf("%d",hit);
+            desplazamiento = grupo[pertenecer].desp;
+            pagina = grupo[pertenecer].pag;
+            hit = 1;
+
+        }
+        else{
         //Desplazamiento
         for(z=0;z<12;z++) { 
             d = binario[z];
@@ -62,26 +88,33 @@ int main() {
             }
         }
 
-        int direccion; 
-        direccion = atoi(&control);
-        char tlb;
-        //int r = rand() % 20;
-        for (int i = 0; i <3; i++){
-            if (grupo[i].control == direccion){
-               &tlb = "Hit" ;
-               break ;
-            }
 
-            if (grupo[i].control == NULL){
-                grupo[i] -> control = direccion ;
-                grupo[i] -> desplazamiento = desplazamiento;
-                grupo[i] -> pagina = pagina;
 
-                &tlb = "Misses";
-                break;
-            }
+
+        if (contador_memoria == 0){ // Primera vez ingresando datos
+            grupo[0].direc = direccion;
+            grupo[0].desp = desplazamiento;
+            grupo[0].pag = pagina;
+            contador_memoria ++ ;
+        }
+        else if (contador_memoria <3) //Con espacio en memoria
+        {
+            grupo[contador_memoria].direc = direccion;
+            grupo[contador_memoria].desp = desplazamiento;
+            grupo[contador_memoria].pag = pagina;
+            contador_memoria ++;
+        }
+        else        // Memoria llena 
+        {
+            int aleatorio rand() %3;
+            grupo[aleatorio].direc = direccion;
+            grupo[aleatorio].desp = desplazamiento;
+            grupo[aleatorio].pag = pagina;
         }
         
+        
+
+        }
         //tiempo final
         struct timeval t_final;
         gettimeofday(&t_final,NULL);
@@ -98,8 +131,15 @@ int main() {
         printf("Tiempo de traducción: ");
         printf("%0.8f",total);
         printf("\n");
-        printf("TLB: ");
-        printf("%s",tlb);
-        printf("\n");
+        if (hit == 1){
+            printf("TLB: Hit");
+            printf("\n");
+        }
+        else{
+            printf("TLB: Miss");
+            printf("\n");
+
+        }
+
     }       
 }
